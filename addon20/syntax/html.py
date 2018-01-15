@@ -28,12 +28,12 @@ def format(color, style=''):
 
 # Syntax styles that can be shared by all languages
 STYLES = {
-    'tag': format('brown'),
-    'element': format('darkMagenta', 'bold'),
-    'attribute': format('green'),
-    'equals': format('gray'),
-    'value': format('blue'),
-    'moustache': format('red', 'bold')
+    'tag': format('#008000'),
+    'element': format('#008000', 'bold'),
+    'attribute': format('#7D9029'),
+    'equals': format('#7D9029'),
+    'value': format('#BA2121'),
+    'moustache': format('#BC7A00', 'bold')
 }
 
 

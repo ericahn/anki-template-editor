@@ -48,7 +48,7 @@ class CssHighlighter (QSyntaxHighlighter):
         rules += [(brace, 0, STYLES['brace'])
                   for brace in ['\{', '\}']]
 
-        rules += [(r'(((\w+[\.$])?(\w+)\s*,\s*)*(\w+[\.$])?(\w+))\s*\{', 1, STYLES['selector'])]
+        rules += [(r'((?:(?:(?:[\w\d-]+)?[#\.])?[\w\d-]+[\s,]+)+)\{', 1, STYLES['selector'])]
         rules += [(r'\b([\w-]+)\s*:\s*([^;]*);', 1, STYLES['property'])]
         rules += [(r'\b([\w-]+)\s*:\s*([^;]*);', 2, STYLES['value'])]
 
@@ -67,6 +67,11 @@ class CssHighlighter (QSyntaxHighlighter):
                 # We actually want the index of the nth match
                 index = expression.pos(nth)
                 length = len(expression.cap(nth))
+                if expression == self.rules[-3][0]:
+                    print(text[index:index+30])
+                    print(length)
+                    print(expression.capturedTexts())
+                    print('\n')
                 self.setFormat(index, length, format)
                 index = expression.indexIn(text, index + length)
 

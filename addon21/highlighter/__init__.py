@@ -24,28 +24,21 @@ def showMore(obj):
 
 
 def attach_highlighter(self):
-    editors = {'html': [], 'css': []}
-    # Detect if in Anki 2.1 or 2.0
-    try:
-        # Anki 2.1
-        tforms = [self.tform]
-    except AttributeError:
-        # Fall back to Anki 2.0.47
-        tforms = [form['tform'] for form in self.forms]
-
-    for tform in tforms:
-        editors['html'] += [tform.front, tform.back]
-        editors['css'] += [tform.css]
+    mw.my_widgets = []
+    editors = {'html': [self.tform.front, self.tform.back],
+               'css':  [self.tform.css]}
 
     # TODO: test this on other platforms besides Linux
-    monospace = QFont('')
+    monospace = QFont('Monospace')
     monospace.setStyleHint(QFont.TypeWriter)
+    mw.my_widgets.append(monospace)
 
-    for language, tforms in editors.items():
-        for tform in tforms:
-            tform.setFont(monospace)
+    for language, text_edits in editors.items():
+        for text_edit in text_edits:
+            text_edit.setFont(monospace)
             highlighter = highlighters[language]
-            highlighter(tform.document())
+            highlighter_widget = highlighter(text_edit.document())
+            mw.my_widgets.append(highlighter_widget)
 
 
 CardLayout.readCard = wrap(CardLayout.readCard, attach_highlighter)

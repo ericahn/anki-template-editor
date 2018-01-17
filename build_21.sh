@@ -2,12 +2,14 @@
 
 # builds zip file for Ankiweb
 
-latestTag=$(git describe --match "addon21.v*")
+echo "Finding latest Anki 2.1 addon release"
+latestTag=$(git describe --match "addon21.v*" --abbrev=0)
 retVal=$?
 if [ ! $retVal -eq 0 ]; then
     echo "Error, exiting without building"
     exit $retVal
 fi
-outFile="anki-template-editor-$latestTag.zip"
+outFile="builds/anki-template-editor-$latestTag.zip"
+echo "Found, building $outFile"
 git archive --format zip --output "$outFile" "$latestTag":addon21
 

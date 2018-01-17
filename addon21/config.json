@@ -1,13 +1,17 @@
 {
+  "user": {
+    "html": "default",
+    "css": "default"
+  },
   "html": {
     "default": {
       "editing": {
         "tabs_to_spaces": true,
         "tab_width": 4
       },
-      "coloring": {
+      "style": {
         "tag_color": "#008000",
-        "element_color": "00800",
+        "element_color": "#008000",
         "element_style": "bold",
         "attribute_color": "#7D9029",
         "equals_color": "#7D9029",
@@ -23,7 +27,7 @@
         "tabs_to_spaces": true,
         "tab_width": 4
       },
-      "coloring": {
+      "style": {
         "brace_color": "#BB7977",
         "selector_color": "#800000",
         "selector_style": "bold",

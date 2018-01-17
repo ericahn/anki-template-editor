@@ -1,4 +1,4 @@
-from aqt.qt import QSyntaxHighlighter
+from aqt.qt import *
 
 
 def format(color, style=''):

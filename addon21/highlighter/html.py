@@ -17,35 +17,48 @@ def format(color, style=''):
     return _format
 
 
-# Syntax styles that can be shared by all languages
-STYLES = {
-    'tag': format('#008000'),
-    'element': format('#008000', 'bold'),
-    'attribute': format('#7D9029'),
-    'equals': format('#7D9029'),
-    'value': format('#BA2121'),
-    'moustache': format('#BC7A00', 'bold')
-}
+TOKENS = ('tag',
+          'element',
+          'attribute',
+          'equals',
+          'value',
+          'moustache')
+
+PROPERTIES = ('color', 'style')
+
+DEFAULT_PROPERTIES = {'color': 'black',
+                      'style': ''}
 
 
-class HtmlHighlighter (QSyntaxHighlighter):
+def create_styles(style_config):
+    styles = {}
+    for token in TOKENS:
+        style = {}
+        for property in PROPERTIES:
+            try:
+                style[property] = style_config['{}_{}'.format(token, property)]
+            except KeyError:
+                style[property] = DEFAULT_PROPERTIES[property]
+        styles[token] = format(**style)
+    return styles
+
+
+class HtmlHighlighter(QSyntaxHighlighter):
     """Syntax highlighter for the Python language.
     """
 
-    def __init__(self, document):
+    def __init__(self, document, style_config):
         QSyntaxHighlighter.__init__(self, document)
 
+        styles = create_styles(style_config)
         rules = []
-
-        rules += [(tag, 0, STYLES['tag'])
+        rules += [(tag, 0, styles['tag'])
                   for tag in ['<', '</', '>', '/>']]
-
-        rules += [(r'<\/?([A-Za-z0-9_]+)>?', 1, STYLES['element'])]
-        rules += [(r'\b([A-Za-z0-9_]+)(=)("[^"]+")', 1, STYLES['attribute'])]
-        rules += [(r'\b([A-Za-z0-9_]+)(=)("[^"]+")', 2, STYLES['equals'])]
-        rules += [(r'\b([A-Za-z0-9_]+)(=)("[^"]+")', 3, STYLES['value'])]
-
-        rules += [(r'\{\{[#^\/]?(\w+:)?\w+\}\}', 0, STYLES['moustache'])]
+        rules += [(r'<\/?([A-Za-z0-9_]+)>?', 1, styles['element'])]
+        rules += [(r'\b([A-Za-z0-9_]+)(=)("[^"]+")', 1, styles['attribute'])]
+        rules += [(r'\b([A-Za-z0-9_]+)(=)("[^"]+")', 2, styles['equals'])]
+        rules += [(r'\b([A-Za-z0-9_]+)(=)("[^"]+")', 3, styles['value'])]
+        rules += [(r'\{\{[#^\/]?(\w+:)?\w+\}\}', 0, styles['moustache'])]
 
         # Build a QRegExp for each pattern
         self.rules = [(QRegExp(pat), index, fmt)

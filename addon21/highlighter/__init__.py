@@ -39,6 +39,17 @@ def attach_highlighter(self):
     mw.my_widgets = []
     editors = {'html': [self.tform.front, self.tform.back],
                'css':  [self.tform.css]}
+    languages = ('html', 'css')
+
+    config = mw.addonManager.getConfig(__name__)
+
+    profiles = {}
+    for language in languages:
+        try:
+            profile_name = config['user'][language]
+        except KeyError:
+            profile_name = 'default'
+        profiles[language] = config[language][profile_name]
 
     # TODO: test this on other platforms besides Linux
     monospace = QFont('Monospace')
@@ -48,9 +59,9 @@ def attach_highlighter(self):
     for language, text_edits in editors.items():
         for text_edit in text_edits:
             text_edit.setFont(monospace)
-            wrap_key(text_edit)
+            # wrap_key(text_edit)
             highlighter = highlighters[language]
-            highlighter_widget = highlighter(text_edit.document())
+            highlighter_widget = highlighter(text_edit.document(), profiles[language]['style'])
             mw.my_widgets.append(highlighter_widget)
 
 

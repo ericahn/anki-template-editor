@@ -17,31 +17,47 @@ def format(color, style=''):
     return _format
 
 
-# Syntax styles that can be shared by all languages
-STYLES = {
-    'brace': format('#BB7977'),
-    'selector': format('#800000', 'bold'),
-    'property': format('#BB7977', 'bold'),
-    'equals': format('gray'),
-    'value': format('#074726')
-}
+TOKENS = ('brace',
+          'selector',
+          'property',
+          'equals',
+          'value')
+
+PROPERTIES = ('color', 'style')
+
+DEFAULT_PROPERTIES = {'color': 'black',
+                      'style': ''}
+
+
+def create_styles(style_config):
+    styles = {}
+    for token in TOKENS:
+        style = {}
+        for property in PROPERTIES:
+            try:
+                style[property] = style_config['{}_{}'.format(token, property)]
+            except KeyError:
+                style[property] = DEFAULT_PROPERTIES[property]
+        styles[token] = format(**style)
+    return styles
 
 
 class CssHighlighter (QSyntaxHighlighter):
     """Syntax highlighter for the Python language.
     """
 
-    def __init__(self, document):
+    def __init__(self, document, style_config):
         QSyntaxHighlighter.__init__(self, document)
 
+        styles = create_styles(style_config)
         rules = []
 
-        rules += [(brace, 0, STYLES['brace'])
+        rules += [(brace, 0, styles['brace'])
                   for brace in ['\{', '\}']]
 
-        rules += [(r'((?:(?:(?:[\w\d-]+)?[#\.])?[\w\d-]+[\s,]+)+)\{', 1, STYLES['selector'])]
-        rules += [(r'\b([\w-]+)\s*:\s*([^;]*);', 1, STYLES['property'])]
-        rules += [(r'\b([\w-]+)\s*:\s*([^;]*);', 2, STYLES['value'])]
+        rules += [(r'((?:(?:(?:[\w\d-]+)?[#\.])?[\w\d-]+[\s,]+)+)\{', 1, styles['selector'])]
+        rules += [(r'\b([\w-]+)\s*:\s*([^;]*);', 1, styles['property'])]
+        rules += [(r'\b([\w-]+)\s*:\s*([^;]*);', 2, styles['value'])]
 
         # Build a QRegExp for each pattern
         self.rules = [(QRegExp(pat), index, fmt)

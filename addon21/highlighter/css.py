@@ -58,11 +58,6 @@ class CssHighlighter (QSyntaxHighlighter):
                 # We actually want the index of the nth match
                 index = expression.pos(nth)
                 length = len(expression.cap(nth))
-                if expression == self.rules[-3][0]:
-                    print(text[index:index+30])
-                    print(length)
-                    print(expression.capturedTexts())
-                    print('\n')
                 self.setFormat(index, length, format)
                 index = expression.indexIn(text, index + length)
 

@@ -23,6 +23,18 @@ def showMore(obj):
     showInfo('Type: {}\nstr(): {}'.format(type(obj), str(obj)))
 
 
+def wrap_key(text_edit):
+    original_key_press = text_edit.keyPressEvent
+
+    def key_press(event):
+        if event.key() == Qt.Key_Tab:
+            text_edit.insertPlainText('  ')
+        else:
+            original_key_press(event)
+
+    text_edit.keyPressEvent = key_press
+
+
 def attach_highlighter(self):
     mw.my_widgets = []
     editors = {'html': [self.tform.front, self.tform.back],
@@ -36,6 +48,7 @@ def attach_highlighter(self):
     for language, text_edits in editors.items():
         for text_edit in text_edits:
             text_edit.setFont(monospace)
+            wrap_key(text_edit)
             highlighter = highlighters[language]
             highlighter_widget = highlighter(text_edit.document())
             mw.my_widgets.append(highlighter_widget)

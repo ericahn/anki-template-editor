@@ -9,7 +9,7 @@ One drawback to the otherwise powerful Anki template editor is the absence of tw
 A common ad-hoc workaround was to copy & paste between the Anki template editor and a separate text editor. This addon provides these missing features directly in the template editor. Syntax highlighting works for both HTML and CSS, although currently the lexing is naive.
 
 Example:
-![Screenshot of editor](https://raw.githubusercontent.com/ericahn/anki-template-editor/master/screenshots/shot4.png)
+![Screenshot of editor](https://raw.githubusercontent.com/ericahn/anki-template-editor/master/docs/screenshots/shot4.png)
 
 Next steps:
 

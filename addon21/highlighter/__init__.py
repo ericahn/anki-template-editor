@@ -13,14 +13,10 @@ from aqt.clayout import CardLayout
 
 from . import css
 from . import html
-
+from .default_config import DEFAULT_CONFIG
 
 highlighters = {'html': html.HtmlHighlighter,
                 'css': css.CssHighlighter}
-
-
-def showMore(obj):
-    showInfo('Type: {}\nstr(): {}'.format(type(obj), str(obj)))
 
 
 def wrap_key(text_edit):
@@ -41,7 +37,10 @@ def attach_highlighter(self):
                'css':  [self.tform.css]}
     languages = ('html', 'css')
 
-    config = mw.addonManager.getConfig(__name__)
+    try:
+        config = mw.addonManager.getConfig(__name__)
+    except AttributeError:
+        config = DEFAULT_CONFIG
 
     profiles = {}
     for language in languages:

@@ -1,4 +1,4 @@
-DFAULT_CONFIG = {
+DEFAULT_CONFIG = {
   "user": {
     "html": "default",
     "css": "default"
